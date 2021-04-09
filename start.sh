@@ -23,5 +23,7 @@ exec bash -c \
   "exec /usr/local/sbin/hitch --user=hitch \
   $HITCH_PARAMS \
   --ciphers=$HITCH_CIPHER \
+  --tls-protos="TLSv1.2" \
+  --alpn-protos="h2" \
   $HITCH_PEM"
 
