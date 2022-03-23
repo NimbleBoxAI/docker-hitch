@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -e
-
+LB="${LB_IP:-34.117.69.179}"
+DNS="${GRPC_HOST:-app.revamp-online.test-2.nimblebox.ai}"
 # check if we have a PEM file or it's two components, otherwise generate a self-signed one
 if [[ -f $HITCH_KEY && -f $HITCH_CERT ]] && [[ ! (-z $HITCH_PEM && -f $HITCH_PEM) ]]; then
   HITCH_PEM=/etc/ssl/hitch/combined.pem
@@ -15,7 +16,7 @@ else
   echo "Couldn't find PEM file, creating one for domain $IP"
   cd /etc/ssl/hitch
   # please replace X.X.X.X with external IP and public.dns.name with external FQDN
-  openssl req -newkey rsa:2048 -sha256 -keyout example.com.key -nodes -x509 -days 36500 -out example.crt -subj "/C=IN/ST=Neverland/L=WholeWorld/O=Nimblebox/OU=SRE/CN=34.117.69.179" -addext "subjectAltName=IP.1:$MY_POD_IP,IP.2:34.117.69.179,IP.3:127.0.0.1,DNS.1:grpc.revamp-online.test-2.nimblebox.ai"
+  openssl req -newkey rsa:2048 -sha256 -keyout example.com.key -nodes -x509 -days 36500 -out example.crt -subj "/C=IN/ST=TN/L=Uthandi/O=Nimblebox.ai/OU=Engineering/CN=$LB" -addext "subjectAltName=IP.1:$MY_POD_IP,IP.2:$LB,IP.3:127.0.0.1,DNS.1:$DNS"
   cat example.com.key example.crt >combined.pem
 fi
 
